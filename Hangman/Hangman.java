@@ -19,30 +19,32 @@ public class Hangman {
 		do {
 			// Print menu
 			do {
+				isValid = true;
 				if (input == '1') {
 					word = getWord(true); // Gets a random word
 					numberOfLetters = word.length();
-					isValid = true;
 				}
 				else if (input == '2') {
 					word = getWord(false); // Gets a word prompt
 					numberOfLetters = word.length();
-					isValid = true;
 				}
 				else if (input == '3') {
 					isExit = true;
-					isValid = true;
 				}
 				else {
-					// Print out a box that says to try it again
+					isValid = false;
+					// Print out a box with stuff
 				}
 			} while (!isValid);
 			
 			if (!isExit) {
 				char wordArray = convertToArray(word)
-				for (int i = 0; i < 26; ++i) {
-					letterList[i] = false;
-				}
+				boolean solvedArray[];
+				solvedArray = new boolean [numberOfLetters];
+				int blanksLeft = numberOfLetters;
+				
+				makeAllFalse(wordArray);
+				makeAllFalse(solvedArray);
 	
 				while (!isSolved && strikes < 6) {
 					// Print out the blanks (or letters)
@@ -52,12 +54,18 @@ public class Hangman {
 					else if (isGuessed(input, letterList))
 						// Prompt user for re-entry
 					else {
-						input = capitalize(input);
+						capitalize(input);
 						letterList[input - 'A'] = true; // Using 'A' as starting point (0)
-						
-						
+						if (isCorrect(input, wordArray, solvedArray, blanksLeft, numberOfLetters)) {
+							// Print out a box saying yay
+						}
+						else {
+							strikes++;
+							// Print out a box saying boo
+						}
 					}
 				}
+				
 			}
 		} while (playAgain && !isExit);
 	}
@@ -98,20 +106,38 @@ public class Hangman {
 			   , "SEMBLANCE" , "LENGTH" , "COLUMN" , "WRECK" , "HUNDRED" } // That's a hundred words
 	}
 	
-	public static char capitalize(char letter) {
-		return toUpperCase(letter);
+	public static void capitalize(char letter) {
+		letter = toUpperCase(letter);
 	}
 	
-	public static boolean isGuessed(char letter, boolean letterList[26]) {
+	public static boolean isGuessed(char letter, boolean letterList[]) {
 		int index = capitalize(letter) - 'A';
 		return letterList[index];
 	}
 	
-	public static boolean isCorrect(char letter, char wordArray[]) {
-		// Returns whether or not the letter is contained in wordArray
+	public static boolean isCorrect(char letter, char wordArray[], boolean solvedArray[], int blanksLeft) {
+		int lettersMinusSolved = blanksLeft;
+		for (int i = 0; i < lettersMinusSolved; ++i) {
+			if (solvedArray[i])
+				lettersMinusSolved--;
+			else {
+				if (wordArray[i] == letter) {
+					blanksLeft--;
+					solvedArray[i] = true;
+				}
+			}
+		}
 	}
 	
 	public static char[] convertToArray(String word) {
 		return word.toCharArray();
 	}
+	
+	public static void makeAllFalse(boolean array[], int length) {
+		for (int i = 0; i < length; ++i) {
+			array[i] = false;
+		}
+	}
+	
+	
 }
