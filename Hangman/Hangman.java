@@ -19,20 +19,21 @@ public class Hangman {
 		do {
 			// Print menu
 			do {
-				isValid = true;
 				if (input == '1') {
 					word = getWord(true); // Gets a random word
 					numberOfLetters = word.length();
+					isValid = true;
 				}
 				else if (input == '2') {
 					word = getWord(false); // Gets a word prompt
 					numberOfLetters = word.length();
+					isValid = true;
 				}
 				else if (input == '3') {
 					isExit = true;
+					isValid = true;
 				}
 				else {
-					isValid = false;
 					// Print out a box with stuff
 				}
 			} while (!isValid);
@@ -56,11 +57,11 @@ public class Hangman {
 					else {
 						capitalize(input);
 						letterList[input - 'A'] = true; // Using 'A' as starting point (0)
-						if (isCorrect(input, wordArray, solvedArray, blanksLeft, numberOfLetters)) {
+						if (isCorrect(input, wordArray, solvedArray, blanksLeft)) {
 							// Print out a box saying yay
 						}
 						else {
-							strikes++;
+							addStrike(strikes);
 							// Print out a box saying boo
 						}
 					}
@@ -90,7 +91,7 @@ public class Hangman {
 			   , "HORRIFY" , "SWISH" , "RENDITION" , "EXPECTATIONS" , "FARAWAY"
 			   , "GUESSING" , "HANGMAN" , "NAMASTE" , "ZEN" , "HUNGRIER"
 			   , "VEXED" , "JAMMED" , "JAMAICAN" , "EVERYONE" , "OBVIOUS"
-			   , "UNKEPT" , "NOWADAYS" , "ELDERLY" , "INSOFAR" , "BOOKKEEPER"
+			   , "UNKEPT" , "NOWADAYS" , "JELLYBEAN" , "INSOFAR" , "BOOKKEEPER"
 			   , "MENIAL" , "AWESOME" , "VENOMOUS" , "GHASTLY" , "WEDDING"
 			   , "QUESTIONNAIRE" , "CRABCAKES" , "TAXING" , "FRENZY" , "OMEGA"
 			   , "MAPLE" , "SQUIRREL" , "BONZAI" , "OBLIVION" , "SHAMING"
@@ -116,6 +117,7 @@ public class Hangman {
 	}
 	
 	public static boolean isCorrect(char letter, char wordArray[], boolean solvedArray[], int blanksLeft) {
+		boolean letterFound = false;
 		int lettersMinusSolved = blanksLeft;
 		for (int i = 0; i < lettersMinusSolved; ++i) {
 			if (solvedArray[i])
@@ -124,9 +126,11 @@ public class Hangman {
 				if (wordArray[i] == letter) {
 					blanksLeft--;
 					solvedArray[i] = true;
+					letterFound = true;
 				}
 			}
 		}
+		return letterFound;
 	}
 	
 	public static char[] convertToArray(String word) {
@@ -138,6 +142,5 @@ public class Hangman {
 			array[i] = false;
 		}
 	}
-	
 	
 }
