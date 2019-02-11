@@ -8,26 +8,24 @@ public class Hangman {
 		char input;
 		boolean isExit = false;
 		boolean isValid = false;
+		boolean isSolved = false;
 		boolean playAgain;
 		
 		String list[];
 		
 		boolean letterList[];
-		letterList = new boolean [26];		
+		letterList = new boolean [26];
 		
-		// Print menu
 		do {
-			for (int i = 0; i < 26; ++i) {
-				letterList[i] = false;
-			}
+			// Print menu
 			do {
 				if (input == '1') {
-					word = getWord(true);
+					word = getWord(true); // Gets a random word
 					numberOfLetters = word.length();
 					isValid = true;
 				}
 				else if (input == '2') {
-					word = getWord(false);
+					word = getWord(false); // Gets a word prompt
 					numberOfLetters = word.length();
 					isValid = true;
 				}
@@ -40,12 +38,13 @@ public class Hangman {
 				}
 			} while (!isValid);
 			
-			
-		
 			if (!isExit) {
-				
-				
-				while (!isCorrect && strikes < 6) {
+				char wordArray = convertToArray(word)
+				for (int i = 0; i < 26; ++i) {
+					letterList[i] = false;
+				}
+	
+				while (!isSolved && strikes < 6) {
 					// Print out the blanks (or letters)
 					// Prompt the user for an entry
 					if (!isLetter(input))
@@ -54,30 +53,15 @@ public class Hangman {
 						// Prompt user for re-entry
 					else {
 						input = capitalize(input);
-						letterList[input - 'A'] = true;
+						letterList[input - 'A'] = true; // Using 'A' as starting point (0)
+						
 						
 					}
 				}
 			}
-		} while (playAgain);
+		} while (playAgain && !isExit);
 	}
-	
-/*	public static String getBlankLines(int numberOfLines) {
-		String output;
-		for (int i = 0; i < numberOfLines; ++i) {
-			output += "\n";
-		}
-		return output;
-	}
-	
-	public static String printStars(int numberOfStars) {
-		String output;
-		for (int i = 0; i < numberOfStars; ++i) {
-			output += "*";
-		}
-		return output;
-	} */
-	
+
 	public static String getWord(boolean isRandom) {
 		// include fillList if isRandom
 	}
@@ -108,7 +92,7 @@ public class Hangman {
 			   , "REGENT" , "XENOMORPH" , "PINKY" , "ENVY" , "POSTERIOR"
 			   , "STERNUM" , "CREDIBLE" , "HAVARTI" , "FENCING" , "YUMMY"
 			   , "SOUNDERS" , "ROCKETS" , "MARLINS" , "EAGLES" , "STORM"
-			   , "DWIGHT" , "TUPAC" , "EXCUSE" , "WORLDLY" , "BREATH"
+			   , "DWINDLING" , "TUPAC" , "EXCUSE" , "WORLDLY" , "BREATH"
 			   , "BONANZA" , "POPCORN" , "NEBULA" , "LIFELIKE" , "DEODORANT"
 			   , "JUMBLED" , "CROSSWORD" , "OPENER" , "INKLING" , "KENNEL"
 			   , "SEMBLANCE" , "LENGTH" , "COLUMN" , "WRECK" , "HUNDRED" } // That's a hundred words
@@ -125,5 +109,9 @@ public class Hangman {
 	
 	public static boolean isCorrect(char letter, char wordArray[]) {
 		// Returns whether or not the letter is contained in wordArray
+	}
+	
+	public static char[] convertToArray(String word) {
+		return word.toCharArray();
 	}
 }
