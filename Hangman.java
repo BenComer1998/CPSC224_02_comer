@@ -1,3 +1,9 @@
+/****************
+Homework #2
+February 12, 2019
+Ben Comer and Alex Weaver
+****************/
+
 import javax.swing.JOptionPane;
 import java.util.Random;
 import java.util.Scanner;
@@ -30,12 +36,14 @@ public class Hangman {
 				}
 
 			if (!isExit) {
+				strikes = 0;
 				char[] wordArray = convertToArray(word);
 				boolean solvedArray[];
 				solvedArray = new boolean [numberOfLetters];
 				int blanksLeft = numberOfLetters;
 
 				makeAllFalse(solvedArray, numberOfLetters);
+				makeAllFalse(letterList, 26);
 
 				do {
 					blanks = "";
