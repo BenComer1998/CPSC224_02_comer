@@ -1,90 +1,100 @@
 import javax.swing.JOptionPane;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Hangman {
 	public static void main(String args[]) {
+		String blanks;
+		String entry;
 		String word;
 		int numberOfLetters;
 		int strikes;
 		char input;
 		boolean isExit = false;
-		boolean isValid = false;
-		boolean isSolved = false;
-		boolean playAgain;
-		
-		String list[];
-		
+
+    String list[];
+		list = new String [100];
+
 		boolean letterList[];
-		letterList = new boolean [26];
-		
+		letterList = new boolean [26]; // a is 0, b is 1, c is 2 ... z is 25
+
 		do {
-			// Print menu
-			do {
+			menu();
 				if (input == '1') {
-					word = getWord(true); // Gets a random word
+					word = getWord(true, list); // Gets a random word
 					numberOfLetters = word.length();
-					isValid = true;
 				}
 				else if (input == '2') {
-					word = getWord(false); // Gets a word prompt
+					word = getWord(false, list); // Gets a word prompt
 					numberOfLetters = word.length();
-					isValid = true;
 				}
 				else if (input == '3') {
 					isExit = true;
-					isValid = true;
 				}
-				else {
-					// Print out a box with stuff
-				}
-			} while (!isValid);
-			
+
 			if (!isExit) {
-				char wordArray = convertToArray(word)
+				char wordArray = convertToArray(word);
 				boolean solvedArray[];
 				solvedArray = new boolean [numberOfLetters];
 				int blanksLeft = numberOfLetters;
-				
+
 				makeAllFalse(wordArray);
 				makeAllFalse(solvedArray);
-	
-				while (!isSolved && strikes < 6) {
-					// Print out the blanks (or letters)
-					// Prompt the user for an entry
+
+				do {
+					for (int i = 0; i <= numberOfLetters; i++){
+						if (solvedArray[i]==false){
+							blanks += "_";
+						}
+						else{
+							blanks += wordArray[i];
+						}
+					}// Print out the blanks (or letters)
+					entry = JOptionPane.showInputDialog(blanks + "\n\nEnter a letter:");// Prompt the user for an entry
+					input = entry.charAt(0);
 					if (!isLetter(input))
-						// Prompt user for re-entry
+						JOptionPane.showMessageDialog(null, "Please only guess a letter.");// Prompt user for re-entry
 					else if (isGuessed(input, letterList))
-						// Prompt user for re-entry
+						JOptionPane.showMessageDialog(null, "You have already guessed this letter. Guess a different letter.");// Prompt user for re-entry
 					else {
-						capitalize(input);
+						input = capitalize(input);
 						letterList[input - 'A'] = true; // Using 'A' as starting point (0)
 						if (isCorrect(input, wordArray, solvedArray, blanksLeft)) {
-							// Print out a box saying yay
+							JOptionPane.showMessageDialog(null, "You guessed a correct letter!");// Print out a box saying yay
 						}
 						else {
-							addStrike(strikes);
-							// Print out a box saying boo
+							strikes++;
+							JOptionPane.showMessageDialog(null, "Whoops! That letter is not in the word.");
 						}
 					}
+					blanksLeft = countBlanksLeft(solvedArray, numberOfLetters);
+				} while (blanksLeft != 0 && strikes < 6);
+
+				if (blanksLeft == 0) {
+					JOptionPane.showMessageDialog(null, "You solved the word!");// Print out congratulatory message, ask to play again?
 				}
-				
+				else {
+					JOptionPane.showMessageDialog(null, "You ran out of tries. Better luck next time!");// Print out apologetic message, ask to play again?
+				}
 			}
-		} while (playAgain && !isExit);
+		} while (!isExit);
 	}
 
-	public static String getWord(boolean isRandom) {
-		// include fillList if isRandom
+
+	public static char menu() {
+		String menuInput;
+		menuInput = JOptionPane.showInputDialog("\tMENU:\n1. 1 PLAYER (random word)\n2. 2 PLAYERS (user input)\n3. EXIT");
+		input = menuInput.charAt(0);
+		if (input == '1' || '2' || '3'){
+			return input;
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Please enter a valid option.");
+			return menu();
+		}
 	}
-	
-	public static void menu() {
-		
-	}
-	
-	public static void addStrike(int strikes) {
-		strikes++;
-	}
-	
+
 	public static void fillList(String list[]) {
-		list = new String [100];
 		list = { "MUMMIFIED" , "CRAZY" , "PUREED" , "POLITICS" , "ALPHABET"
 			   , "GARRISON" , "FRIENDLY" , "SMART" , "YESTERDAY" , "MONSTROUS"
 			   , "BRINK" , "INSANITY" , "GRILL" , "DECRIES" , "SUMMATION"
@@ -106,41 +116,79 @@ public class Hangman {
 			   , "JUMBLED" , "CROSSWORD" , "OPENER" , "INKLING" , "KENNEL"
 			   , "SEMBLANCE" , "LENGTH" , "COLUMN" , "WRECK" , "HUNDRED" } // That's a hundred words
 	}
-	
-	public static void capitalize(char letter) {
-		letter = toUpperCase(letter);
+
+	public static char capitalize(char letter) {
+		return toUpperCase(letter);
 	}
-	
+
 	public static boolean isGuessed(char letter, boolean letterList[]) {
 		int index = capitalize(letter) - 'A';
 		return letterList[index];
 	}
-	
+
 	public static boolean isCorrect(char letter, char wordArray[], boolean solvedArray[], int blanksLeft) {
 		boolean letterFound = false;
-		int lettersMinusSolved = blanksLeft;
-		for (int i = 0; i < lettersMinusSolved; ++i) {
+		int letters = blanksLeft;
+		for (int i = 0; i < letters; ++i) {
 			if (solvedArray[i])
-				lettersMinusSolved--;
-			else {
-				if (wordArray[i] == letter) {
-					blanksLeft--;
-					solvedArray[i] = true;
-					letterFound = true;
-				}
+				letters++;
+			else if (wordArray[i] == letter) {
+				solvedArray[i] = true;
+				letterFound = true;
 			}
 		}
 		return letterFound;
 	}
-	
+
 	public static char[] convertToArray(String word) {
 		return word.toCharArray();
 	}
-	
+
 	public static void makeAllFalse(boolean array[], int length) {
 		for (int i = 0; i < length; ++i) {
 			array[i] = false;
 		}
 	}
-	
+
+	public static int countBlanksLeft(boolean solvedArray[], int numberOfLetters) {
+		int blanksLeft = 0;
+		for (int i = 0; i < numberOfLetters; ++i) {
+			if (!solvedArray[i])
+				blanksLeft++;
+		}
+		return blanksLeft;
+	}
+
+	public static String getWord(boolean isRandom, String list[]) {
+			if (isRandom) {
+				return list[Random.nextInt(99)];
+			}
+			else {
+				boolean isValid = false;
+				String entry = JOptionPane.showInputDialog("Enter a word for the other player to guess:");
+				do {
+					boolean allLetters = true;
+					if (entry != null) {
+						int numberOfLetters = entry.length();
+						for (int i = 0; i < numberOfLetters && allLetters; ++i) {
+							if (!isLetter(entry[i])) {
+								allLetters = false;
+							}
+						}
+
+						if (allLetters) {
+							isValid = true;
+						}
+						else {
+							entry = JOptionPane.showInputDialog("Please only enter letters as input.");
+						}
+
+					}
+					else {
+						entry = JOptionPane.showInputDialog("Please enter a word of at least one letter.");
+					}
+				} while (!isValid);
+			}
+		}
+
 }
