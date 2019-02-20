@@ -28,7 +28,7 @@ public class TicTacToe extends JFrame {
 	}
 	private int gameState;
 	
-	private GamePanel gamePanel;
+	// private GamePanel gamePanel;
 	private BottomGroupPanel bottomPanel;
 	
 	public TicTacToe() {
@@ -37,10 +37,10 @@ public class TicTacToe extends JFrame {
 		setLayout(new BorderLayout());
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		
-		gamePanel = new GamePanel();
+		// gamePanel = new GamePanel();
 		bottomPanel = new BottomGroupPanel();
 		
-		add(gamePanel, BorderLayout.NORTH);
+		// add(gamePanel, BorderLayout.NORTH);
 		add(bottomPanel, BorderLayout.SOUTH);
 		
 		pack();
