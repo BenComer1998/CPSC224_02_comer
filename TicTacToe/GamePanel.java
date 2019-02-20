@@ -11,7 +11,7 @@ public class GamePanel extends JPanel {
 	TicTacToeBoard board;
 	
 	public GamePanel() {
-		setLayout(new GridLayout(2, 1));
+		setLayout(new BorderLayout());
 		
 		stats1 = new Stats(1);
 		stats2 = new Stats(2);

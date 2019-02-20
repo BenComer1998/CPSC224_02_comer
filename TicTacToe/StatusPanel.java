@@ -3,7 +3,7 @@
 
 import javax.swing.*;
 
-public class StatusPanel extends JFrame {
+public class StatusPanel extends JPanel {
 	private JLabel statusBar;
 	private JPanel panel;
 	
@@ -13,4 +13,6 @@ public class StatusPanel extends JFrame {
 		statusBar = new JLabel("", LEFT);
 		panel.add(statusBar);
 	}
+	
+	
 }
