@@ -1,3 +1,9 @@
+/****************
+Homework #3
+February 24, 2019
+Alex Weaver and Ben Comer
+****************/
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
