@@ -11,6 +11,7 @@ public class TicTacToe extends JFrame {
 	private JPanel panel;
 	public static final int FRAME_WIDTH = 500;
 	public static final int FRAME_HEIGHT = 500;
+	public static Font boldFont = new Font("Arial", Font.BOLD, 24);	
 
 	private static Fill currentPlayer = Fill.EX; ///FIX ME
 	private int turnNumber = 1;
@@ -337,17 +338,13 @@ public class TicTacToe extends JFrame {
 			if (player == 1) {
 				numberOfWins = new JLabel (String.valueOf(xWins));
 				numberOfLosses = new JLabel (String.valueOf(oWins));
+				symbol = 'X';
 			}
 			else {
 				numberOfLosses = new JLabel (String.valueOf(xWins));
 				numberOfWins = new JLabel (String.valueOf(oWins));
-			}
-
-			//set player symbol for border
-			if (player == 1)
-				symbol = 'X';
-			else
 				symbol = 'O';
+			}
 
 			//create labeled border
 			setBorder(BorderFactory.createTitledBorder("Player " + player + " (" + symbol + "):"));
