@@ -12,7 +12,8 @@ public class MotionParallax extends JFrame implements MouseListener, MouseMotion
 
   private int delay = 16;
   protected Timer timer;
-
+  private int currentX = 0;
+  private int currentY = 0;
 
   public MotionParallax(){
     setTitle("Motion Parallax");
@@ -21,8 +22,8 @@ public class MotionParallax extends JFrame implements MouseListener, MouseMotion
     setResizable(false);
     addMouseListener(this);
     addMouseMotionListener(this);
-    addActionListener(new ParallaxTimer);
-    timer = new Timer(delay, ParallaxTimer);
+    addActionListener(new ParallaxTimer());
+    timer = new Timer(delay, ParallaxTimer());
     timer.start();
     setVisible(true);
 
@@ -36,23 +37,26 @@ public class MotionParallax extends JFrame implements MouseListener, MouseMotion
 	int r2 = 144; int g2 = 104; int b2 = 54; // Color for the smaller mountain
   }
 
-    public void paint(Graphics g) {
-      g.setColor(Color.rgb(r1, g1, b1)); // This sets the color to a greyish pink.
-      int pinkMountainXValues[3] = {pinkMountainCurrentX, pinkMountainCurrentX + 600, pinkMountainCurrentX + 300};
-      int pinkMountainYValues[3] = {pinkMountainCurrentY, pinkMountainCurrentY, pinkMountainCurrentY - 650};
-      g.fillPolygon(pinkMountainXValues, pinkMountainYValues, 3);
+  public void paint(Graphics g) {
+    g.setColor(Color.rgb(r1, g1, b1)); // This sets the color to a greyish pink.
+	int pinkMountainXValues[] = new int [3];
+    pinkMountainXValues = {pinkMountainCurrentX, pinkMountainCurrentX + 600, pinkMountainCurrentX + 300};
+	int pinkMountainYValues[] = new int [3];
+    pinkMountainYValues = {pinkMountainCurrentY, pinkMountainCurrentY, pinkMountainCurrentY - 650};
+    g.fillPolygon(pinkMountainXValues, pinkMountainYValues, 3);
 
-      g.setColor(Color.rgb(r2, g2, b2)); // This sets the color to brown.
-      int brownMountainXValues[3] = {brownMountainCurrentX, brownMountainCurrentX + 400, brownMountainCurrentX + 200};
-      int brownMountainYValues[3] = {brownMountainCurrentY, brownMountainCurrentY, brownMountainCurrentY - 600};
-      g.fillPolygon(brownMountainXValues, brownMountainYValues, 3);
+    g.setColor(Color.rgb(r2, g2, b2)); // This sets the color to brown.
+	int brownMountainXValues[] = new int [3];
+    brownMountainXValues = {brownMountainCurrentX, brownMountainCurrentX + 400, brownMountainCurrentX + 200};
+    int brownMountainYValues[] = new int [3];
+	brownMountainYValues = {brownMountainCurrentY, brownMountainCurrentY, brownMountainCurrentY - 600};
+    g.fillPolygon(brownMountainXValues, brownMountainYValues, 3);
 
-      g.setColor(Color.rgb(32, 173, 33)); // This sets the color to a grass green.
-      g.fillRect(-1000, grassCurrentY, 3000, 1300); // Creates the grass.
+    g.setColor(Color.rgb(32, 173, 33)); // This sets the color to a grass green.
+    g.fillRect(-1000, grassCurrentY, 3000, 1300); // Creates the grass.
   }
 
-  public void mousePressed(MouseEvent e)
-  {
+  public void mousePressed(MouseEvent e) {
     // Get the mouse cursor coordinates.
     currentX = e.getX();
     currentY = e.getY();
