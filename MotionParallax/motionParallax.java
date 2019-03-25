@@ -7,13 +7,25 @@ Alex Weaver and Ben Comer
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
+import java.util.Random;
 
 public class MotionParallax extends JFrame implements MouseListener, MouseMotionListener{
 
+  private boolean dragging = false;
   private int delay = 16;
+  private int currentX = 0; //mouse position x
+  private int currentY = 0; //mouse position Y
+  private int sX = 0; //drag position x
+  private int sY = 0; //drag position y
+  private int pinkMountainCurrentX = 300;
+  private int pinkMountainCurrentY = 900;
+  private int brownMountainCurrentX = 200;
+  private int brownMountainCurrentY = 950;
+  private int grassCurrentY = 700;
+  private int r1 = 211; private int g1 = 168; private int b1 = 198; // Color for the bigger mountain
+  private int r2 = 144; private int g2 = 104; private int b2 = 54; // Color for the smaller mountain
   protected Timer timer;
-  private int currentX = 0;
-  private int currentY = 0;
+
 
   public MotionParallax(){
     setTitle("Motion Parallax");
@@ -26,37 +38,39 @@ public class MotionParallax extends JFrame implements MouseListener, MouseMotion
     timer = new Timer(delay, ParallaxTimer());
     timer.start();
     setVisible(true);
-
-    int pinkMountainCurrentX = 300;
-    int pinkMountainCurrentY = 900;
-    int brownMountainCurrentX = 200;
-    int brownMountainCurrentY = 950;
-    int grasscurrentY = 700;
 	
-	int r1 = 211; int g1 = 168; int b1 = 198; // Color for the bigger mountain
-	int r2 = 144; int g2 = 104; int b2 = 54; // Color for the smaller mountain
+	getContentPane().setBackground(new Color(166, 255, 255));
   }
 
   public void paint(Graphics g) {
-    g.setColor(Color.rgb(r1, g1, b1)); // This sets the color to a greyish pink.
-	int pinkMountainXValues[] = new int [3];
-    pinkMountainXValues = {pinkMountainCurrentX, pinkMountainCurrentX + 600, pinkMountainCurrentX + 300};
-	int pinkMountainYValues[] = new int [3];
-    pinkMountainYValues = {pinkMountainCurrentY, pinkMountainCurrentY, pinkMountainCurrentY - 650};
+    g.setColor(new Color(r1, g1, b1)); // This sets the color to a greyish pink.
+    int pinkMountainXValues[] = new int [3];
+    pinkMountainXValues[0] = pinkMountainCurrentX;
+    pinkMountainXValues[1] = pinkMountainCurrentX + 600;
+    pinkMountainXValues[2] = pinkMountainCurrentX + 300;
+    int pinkMountainYValues[] = new int [3];
+    pinkMountainYValues[0] = pinkMountainCurrentY;
+    pinkMountainYValues[1] = pinkMountainCurrentY;
+    pinkMountainYValues[2] = pinkMountainCurrentY - 650;
     g.fillPolygon(pinkMountainXValues, pinkMountainYValues, 3);
 
-    g.setColor(Color.rgb(r2, g2, b2)); // This sets the color to brown.
-	int brownMountainXValues[] = new int [3];
-    brownMountainXValues = {brownMountainCurrentX, brownMountainCurrentX + 400, brownMountainCurrentX + 200};
+    g.setColor(new Color(r2, g2, b2)); // This sets the color to brown.
+    int brownMountainXValues[] = new int [3];
+    brownMountainXValues[0] = brownMountainCurrentX;
+    brownMountainXValues[1] = brownMountainCurrentX + 400;
+    brownMountainXValues[2] = brownMountainCurrentX + 200;
     int brownMountainYValues[] = new int [3];
-	brownMountainYValues = {brownMountainCurrentY, brownMountainCurrentY, brownMountainCurrentY - 600};
+    brownMountainYValues[0] = brownMountainCurrentY;
+    brownMountainYValues[0] = brownMountainCurrentY;
+    brownMountainYValues[0] = brownMountainCurrentY - 600;
     g.fillPolygon(brownMountainXValues, brownMountainYValues, 3);
 
-    g.setColor(Color.rgb(32, 173, 33)); // This sets the color to a grass green.
+    g.setColor(new Color(32, 173, 33)); // This sets the color to a grass green.
     g.fillRect(-1000, grassCurrentY, 3000, 1300); // Creates the grass.
   }
 
-  public void mousePressed(MouseEvent e) {
+  public void mousePressed(MouseEvent e)
+  {
     // Get the mouse cursor coordinates.
     currentX = e.getX();
     currentY = e.getY();
@@ -70,7 +84,11 @@ public class MotionParallax extends JFrame implements MouseListener, MouseMotion
 
   public void mouseDragged(MouseEvent e)
   {
-
+    sX = e.getX();
+    sY = e.getY();
+    if (dragging){
+      repaint();
+    }
   }
 
   public void mouseClicked(MouseEvent e)
@@ -78,9 +96,13 @@ public class MotionParallax extends JFrame implements MouseListener, MouseMotion
     // generate the random integers for r, g and b value
     // code cited -> https://stackoverflow.com/questions/20560899/generate-a-random-color-java?lq=1
     Random rand = new Random();
-    int r = rand.nextInt(255);
-    int g = rand.nextInt(255);
-    int b = rand.nextInt(255);
+    r1 = rand.nextInt(255);
+    g1 = rand.nextInt(255);
+    b1 = rand.nextInt(255);
+
+    r2 = rand.nextInt(255);
+    g2 = rand.nextInt(255);
+    b2 = rand.nextInt(255);
   }
 
   public void mouseEntered(MouseEvent e)
@@ -91,14 +113,14 @@ public class MotionParallax extends JFrame implements MouseListener, MouseMotion
   {
   }
 
-  private class ParallaxTimer implements ActionListener{
-    public void actionPerformed(ActionEvent e){
+  private class ParallaxTimer implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
       repaint();
     }
   }
 
 
-  public static void main(String[] args){
-    new motionParallax();
+  public static void main(String[] args) {
+    new MotionParallax();
   }
 }
